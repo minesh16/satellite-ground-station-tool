@@ -33,8 +33,66 @@ TerraLink is a sophisticated geospatial analysis platform designed for optimal s
 
 ### **System Architecture Diagram**
 
+```mermaid
+graph LR
+    %% Styling
+    classDef dataBox fill:#FFF4E6,stroke:#D69E2E,stroke-width:2px,color:#744210
+    classDef serviceBox fill:#E6FFFA,stroke:#38B2AC,stroke-width:2px,color:#234E52
+    classDef deployBox fill:#EDF2F7,stroke:#4A5568,stroke-width:2px,color:#1A202C
+    classDef apiBox fill:#FED7D7,stroke:#E53E3E,stroke-width:2px,color:#742A2A
+    classDef clientBox fill:#E6F3FF,stroke:#3182CE,stroke-width:2px,color:#2A4365
+
+    %% Data Sources
+    subgraph BD ["📊 Batch Data"]
+        CSV["📱 Mobile Site CSVs"]
+        NBN["🌐 NBN Coverage Shapefiles"] 
+        KML["📡 Optus Coverage KML"]
+    end
+    
+    %% Real-time APIs
+    subgraph RA ["🌍 Real-time APIs"]
+        ELVIS["🏔️ ELVIS Elevation Service"]
+        ABS["👥 ABS Demographics Service"]
+    end
+    
+    %% Data Pipeline
+    subgraph DP ["🐍 Data Pipeline"]
+        SCRIPTS["📝 Ingestion Scripts"]
+    end
+    
+    %% Deployment Environment
+    subgraph DEPLOY ["🚀 Deployment"]
+        WEB["⚛️ Web Application<br/>(React)"]
+        API["🟢 API Server<br/>(Node.js)"]
+        DB["🐘 PostGIS DB<br/>(PostgreSQL)"]
+    end
+    
+    %% Clients
+    subgraph CLIENTS ["👥 Clients"]
+        BROWSER["💻 Web Browser"]
+    end
+    
+    %% Data flow connections
+    CSV --> SCRIPTS
+    NBN --> SCRIPTS  
+    KML --> SCRIPTS
+    SCRIPTS -->|"Load Data"| DB
+    
+    BROWSER -->|"HTTPS"| WEB
+    WEB -->|"REST API Calls"| API
+    API <-->|"Geospatial Queries"| DB
+    API -->|"Elevation Lookup"| ELVIS
+    API -->|"Population Lookup"| ABS
+    
+    %% Apply styles
+    class BD,CSV,NBN,KML dataBox
+    class RA,ELVIS,ABS apiBox
+    class DP,SCRIPTS serviceBox
+    class DEPLOY,WEB,API,DB deployBox
+    class CLIENTS,BROWSER clientBox
+```
+
 <div align="center">
-  <img src="docs/architecture-diagram.png" alt="TerraLink System Architecture" width="100%" style="max-width: 1200px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
   <p><em>TerraLink system architecture showing data flow from ingestion to real-time analysis</em></p>
 </div>
 
