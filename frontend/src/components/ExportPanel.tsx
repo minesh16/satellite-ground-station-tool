@@ -79,7 +79,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
           // Transform the data to match backend expectations
           const pdfData = analysisData.analysis ? analysisData : {
             analysis: {
-              candidate_sites: sites.map(site => ({
+              candidate_sites: sites.map((site: any) => ({
                 id: site.id,
                 latitude: site.latitude,
                 longitude: site.longitude,
