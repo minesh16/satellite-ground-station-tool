@@ -66,5 +66,9 @@ coverage/
 # package-lock.json
 # yarn.lock
 
-# Large KML files
+# Large files
 *.kml
+*.shp
+*.dbf
+*.prj
+*.shx
