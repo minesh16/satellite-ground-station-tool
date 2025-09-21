@@ -31,23 +31,39 @@ TerraLink is a sophisticated geospatial analysis platform designed for optimal s
 
 ## 🏗️ **Architecture**
 
-### **Technology Stack**
+### **System Architecture Diagram**
+
+<div align="center">
+  <img src="docs/architecture-diagram.png" alt="TerraLink System Architecture" width="100%" style="max-width: 1200px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  <p><em>TerraLink system architecture showing data flow from ingestion to real-time analysis</em></p>
+</div>
+
+The TerraLink platform follows a modern microservices architecture with clear separation of concerns:
+
+#### **🔄 Data Flow**
+1. **Batch Data Ingestion**: CSV files (mobile sites) and shapefiles (NBN coverage) processed via Python scripts
+2. **Real-time APIs**: ELVIS elevation and ABS demographic services integrated for live data
+3. **Spatial Database**: PostGIS handles complex geospatial queries and analysis
+4. **REST API**: Node.js/Express server provides RESTful endpoints
+5. **Interactive Frontend**: React application with real-time mapping and analysis
+
+#### **📊 Key Components**
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
-| **Frontend** | React 18+ with TypeScript | Interactive user interface |
-| **Backend** | Node.js with Express.js | RESTful API server |
-| **Database** | PostgreSQL 14+ with PostGIS 3.2+ | Spatial data storage and analysis |
-| **Mapping** | Leaflet with React-Leaflet | Interactive geospatial visualization |
-| **UI Framework** | Material-UI (MUI) v5 | Modern component library |
+| **Web Application** | React 18+ with TypeScript | Interactive user interface with mapping |
+| **API Server** | Node.js with Express.js | RESTful API server and business logic |
+| **PostGIS Database** | PostgreSQL 14+ with PostGIS 3.2+ | Spatial data storage and complex queries |
+| **Data Pipeline** | Python scripts | Batch processing of telecom and coverage data |
+| **External APIs** | ELVIS, ABS Services | Real-time elevation and demographic data |
 
-### **Data Sources**
+### **🌐 Data Sources Integration**
 
-- **📡 Telecommunications**: Mobile carrier sites (Telstra, Optus, TPG), NBN coverage
-- **🏔️ Elevation**: Australian ELVIS API (25m resolution DEM)
-- **👥 Population**: Australian Bureau of Statistics demographic data
-- **🏛️ Regulatory**: Crown land registry and zoning information
-- **🛰️ Satellite**: Kuiper constellation orbital mechanics and link budgets
+- **📡 Telecommunications**: Mobile carrier sites (Telstra, Optus, TPG), NBN coverage areas
+- **🏔️ Elevation**: Australian ELVIS API providing 25m resolution DEM data
+- **👥 Population**: Australian Bureau of Statistics demographic and urbanization data
+- **🏛️ Regulatory**: Crown land registry and zoning information for site availability
+- **🛰️ Satellite**: Kuiper constellation orbital mechanics and RF link budget calculations
 
 ---
 
