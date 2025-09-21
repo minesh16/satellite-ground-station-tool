@@ -65,3 +65,6 @@ coverage/
 # Lock files (optional - you may want to include these)
 # package-lock.json
 # yarn.lock
+
+# Large KML files
+*.kml
