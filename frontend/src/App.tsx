@@ -17,16 +17,15 @@ import {
 } from '@mui/material';
 import { 
   Menu as MenuIcon, 
-  Satellite as SatelliteIcon,
   Tune as AnalysisIcon,
   Assessment as ResultsIcon,
   Download as ExportIcon,
-  LocationSearching as LocationIcon,
 } from '@mui/icons-material';
 import MapComponent from './components/MapComponent';
 import AnalysisPanel from './components/AnalysisPanel';
 import ResultsDashboard from './components/ResultsDashboard';
 import ExportPanel from './components/ExportPanel';
+import LandingPage from './components/LandingPage';
 import 'leaflet/dist/leaflet.css';
 
 const theme = createTheme({
@@ -164,12 +163,17 @@ const theme = createTheme({
 const DRAWER_WIDTH = 400;
 
 function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState<any[]>([]);
   const [analysisResults, setAnalysisResults] = useState<any[]>([]);
   const [currentTab, setCurrentTab] = useState(0);
   const [analysisData, setAnalysisData] = useState<any>(null);
   const [mapBounds, setMapBounds] = useState<{north: number, south: number, east: number, west: number} | null>(null);
+
+  const handleEnterApp = () => {
+    setShowLanding(false);
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -296,6 +300,16 @@ function App() {
     </Box>
   );
 
+  // Show landing page if not entered yet
+  if (showLanding) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <LandingPage onEnterApp={handleEnterApp} />
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -320,12 +334,22 @@ function App() {
               </IconButton>
             </Tooltip>
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-              <SatelliteIcon sx={{ mr: 1, fontSize: 28, color: '#60a5fa' }} />
-              <LocationIcon sx={{ fontSize: 24, color: '#34d399' }} />
+              <img 
+                src="/sgs_logo.png" 
+                alt="TerraLink Logo" 
+                style={{ 
+                  height: 48, 
+                  width: 48, 
+                  marginRight: 12,
+                  borderRadius: 6,
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                  border: '2px solid rgba(255, 255, 255, 0.1)'
+                }} 
+              />
             </Box>
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 600 }}>
-                Satellite Ground Station Optimizer
+                TerraLink
               </Typography>
               <Typography variant="caption" sx={{ opacity: 0.8, display: { xs: 'none', sm: 'block' } }}>
                 Advanced Location Intelligence & Analysis Platform

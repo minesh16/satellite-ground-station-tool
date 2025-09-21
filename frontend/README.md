@@ -1,6 +1,6 @@
-# Satellite Ground Station Location Optimizer - Frontend
+# TerraLink - Frontend
 
-React-based frontend application for the Satellite Ground Station Location Optimization Tool.
+React-based frontend application for the TerraLink Location Intelligence Platform.
 
 ## Features
 

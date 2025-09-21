@@ -38,7 +38,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
   const [success, setSuccess] = useState<string | null>(null);
   
   const [pdfOptions, setPdfOptions] = useState<ExportOptions>({
-    title: 'Satellite Ground Station Site Analysis Report',
+    title: 'TerraLink Site Analysis Report',
     includeDetailedAnalysis: true,
     includeRecommendations: true,
     includeMaps: false,

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Satellite Ground Station Frontend Startup Script
+# TerraLink Frontend Startup Script
 
-echo "🛰️  Starting Satellite Ground Station Location Optimizer Frontend"
+echo "🌐  Starting TerraLink Location Intelligence Platform"
 echo "================================================"
 
 # Check if node_modules exists
