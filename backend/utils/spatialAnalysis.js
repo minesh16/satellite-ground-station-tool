@@ -69,65 +69,125 @@ function isLikelyOnLand(longitude, latitude) {
         return false;
     }
     
-    // Major ocean areas to exclude (simplified coastal filtering)
-    // These are approximate ocean/major water body exclusions
+    // Define Australia's approximate land boundaries using a more conservative approach
+    // This creates a rough polygon of Australia's mainland coastline
     
-    // Great Australian Bight (Southern Ocean)
-    if (longitude >= 129.0 && longitude <= 140.0 && latitude <= -35.0) {
+    // Western Australia coast (Indian Ocean exclusions)
+    if (longitude <= 115.0) {
+        // Very conservative eastern boundary for WA coast
+        if (latitude >= -35.0 || latitude <= -21.0) {
+            return false; // Far north and south WA are mostly ocean on this boundary
+        }
+    }
+    
+    // Northern Australia (Timor Sea, Coral Sea)
+    if (latitude >= -12.0) {
+        // Northern coastline - be very conservative
+        if (longitude <= 130.0 || longitude >= 142.0) {
+            return false; // Far west and east of northern Australia
+        }
+        // Additional northern exclusions
+        if (longitude >= 135.0 && longitude <= 140.0 && latitude >= -11.0) {
+            return false; // Gulf of Carpentaria area
+        }
+    }
+    
+    // Eastern Australia (Tasman Sea, Coral Sea)
+    if (longitude >= 149.0) {
+        // Eastern coastline exclusions
+        if (latitude >= -29.0 || latitude <= -37.0) {
+            return false; // Far north and south QLD/NSW coast
+        }
+        // Very eastern areas
+        if (longitude >= 151.0) {
+            return false; // Too far east into Tasman Sea
+        }
+    }
+    
+    // Southern Australia (Southern Ocean, Great Australian Bight)
+    if (latitude <= -35.0) {
+        // Southern coastline - very restrictive
+        if (longitude <= 117.0 || longitude >= 140.0) {
+            return false; // Far west and east of southern coastline
+        }
+        // Great Australian Bight
+        if (longitude >= 125.0 && longitude <= 135.0 && latitude <= -34.0) {
+            return false; // Southern Ocean/Bight area
+        }
+    }
+    
+    // Bass Strait (between Victoria and Tasmania) - much more restrictive
+    if (longitude >= 143.0 && longitude <= 149.0 && latitude >= -40.0 && latitude <= -38.0) {
         return false;
     }
     
-    // Tasman Sea (far eastern coast)
-    if (longitude >= 152.0 && longitude <= 153.7) {
-        // Check if too far from coast
-        if ((latitude >= -37.0 && latitude <= -28.0) && longitude >= 152.5) {
+    // Tasmania - only allow central/northern parts
+    if (latitude <= -40.5) {
+        // Southern Tasmania and surrounding waters
+        if (longitude <= 146.0 || longitude >= 148.5) {
+            return false;
+        }
+        // Far southern Tasmania
+        if (latitude <= -43.0) {
             return false;
         }
     }
     
-    // Bass Strait (between Victoria and Tasmania)
-    if (longitude >= 144.0 && longitude <= 148.5 && latitude >= -40.5 && latitude <= -38.5) {
-        return false;
-    }
-    
-    // Spencer Gulf and Gulf St Vincent (SA)
-    if (longitude >= 136.0 && longitude <= 138.5 && latitude >= -35.5 && latitude <= -32.5) {
-        // These are complex coastal areas, be conservative
-        if (longitude <= 137.0 && latitude >= -34.5) {
-            return false; // Spencer Gulf
+    // Spencer Gulf and Gulf St Vincent (SA) - more restrictive
+    if (longitude >= 135.0 && longitude <= 139.0 && latitude >= -36.0 && latitude <= -32.0) {
+        // Spencer Gulf
+        if (longitude >= 136.0 && longitude <= 137.5 && latitude >= -35.0 && latitude <= -33.0) {
+            return false;
         }
-        if (longitude >= 138.0 && latitude >= -34.0) {
-            return false; // Gulf St Vincent
-        }
-    }
-    
-    // Coral Sea (far north Queensland)
-    if (longitude >= 150.0 && latitude >= -16.0 && latitude <= -9.2) {
-        return false;
-    }
-    
-    // Timor Sea (far north)
-    if (longitude >= 129.0 && longitude <= 135.0 && latitude >= -12.0) {
-        return false;
-    }
-    
-    // Indian Ocean (far west)
-    if (longitude <= 115.0 && latitude <= -30.0) {
-        return false;
-    }
-    
-    // Additional validation: exclude obvious water bodies
-    // Lake Eyre and other major inland lakes (simplified)
-    if (longitude >= 136.0 && longitude <= 138.0 && latitude >= -30.0 && latitude <= -28.0) {
-        // This is the Lake Eyre region - allow most of it as it's mostly dry land
-        // Only exclude the actual lake center
-        if (longitude >= 137.2 && longitude <= 137.6 && latitude >= -28.8 && latitude <= -28.4) {
+        // Gulf St Vincent
+        if (longitude >= 137.5 && longitude <= 138.5 && latitude >= -35.5 && latitude <= -34.0) {
             return false;
         }
     }
     
-    // If none of the exclusions match, consider it land
-    return true;
+    // Additional major water body exclusions
+    
+    // Lake Eyre and Kati Thanda region
+    if (longitude >= 136.0 && longitude <= 138.5 && latitude >= -30.0 && latitude <= -28.0) {
+        if (longitude >= 137.0 && longitude <= 137.8 && latitude >= -29.0 && latitude <= -28.2) {
+            return false;
+        }
+    }
+    
+    // Shark Bay (WA)
+    if (longitude >= 113.0 && longitude <= 114.0 && latitude >= -26.5 && latitude <= -25.5) {
+        return false;
+    }
+    
+    // King Sound and Roebuck Bay (WA)
+    if (longitude >= 122.0 && longitude <= 123.5 && latitude >= -18.0 && latitude <= -17.0) {
+        return false;
+    }
+    
+    // Port Phillip Bay (VIC)
+    if (longitude >= 144.5 && longitude <= 145.2 && latitude >= -38.5 && latitude <= -37.8) {
+        return false;
+    }
+    
+    // Moreton Bay (QLD)
+    if (longitude >= 153.0 && longitude <= 153.5 && latitude >= -27.8 && latitude <= -26.8) {
+        return false;
+    }
+    
+    // Additional coastal buffer - exclude points very close to known coastal boundaries
+    // This adds a safety margin to prevent sites right at water's edge
+    
+    // Create a more restrictive inner boundary for Australia
+    const isInSaferLandArea = 
+        longitude >= 116.0 && longitude <= 150.0 &&  // More restrictive east-west bounds
+        latitude >= -42.0 && latitude <= -11.0 &&    // More restrictive north-south bounds
+        !(longitude <= 118.0 && latitude <= -33.0) && // Exclude far SW corner
+        !(longitude <= 118.0 && latitude >= -20.0) && // Exclude far NW corner  
+        !(longitude >= 148.0 && latitude >= -28.0) && // Exclude far NE corner
+        !(longitude >= 147.0 && latitude <= -37.0);   // Exclude far SE corner
+    
+    // Only allow sites in the safer land area to minimize ocean placement
+    return isInSaferLandArea;
 }
 
 /**
