@@ -19,6 +19,13 @@ import {
   PlayArrow as PlayIcon,
   Tune as TuneIcon,
   LocationOn as LocationIcon,
+  Science as ScienceIcon,
+  Insights as InsightsIcon,
+  Speed as PerformanceIcon,
+  Balance as WeightIcon,
+  Visibility as ViewIcon,
+  Settings as SettingsIcon,
+  FilterAlt as FilterIcon,
 } from '@mui/icons-material';
 import { AnalysisParameters, Site } from '../types';
 import { apiService } from '../services/api';
@@ -144,9 +151,24 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar>
-        <TuneIcon sx={{ mr: 1 }} />
-        <Typography variant="h6">Analysis Parameters</Typography>
+      <Toolbar sx={{ 
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        borderRadius: '8px 8px 0 0',
+        margin: '8px 8px 0 8px'
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+          <TuneIcon sx={{ mr: 1, color: 'primary.main', fontSize: 28 }} />
+          <ScienceIcon sx={{ fontSize: 20, color: 'secondary.main' }} />
+        </Box>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Analysis Parameters
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Configure optimization factors and constraints
+          </Typography>
+        </Box>
       </Toolbar>
       
       <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
@@ -172,15 +194,46 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
           </Alert>
         )}
 
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">Factor Weights</Typography>
-            <Chip
-              label={`${totalWeight}%`}
-              color={totalWeight === 100 ? 'success' : 'error'}
-              size="small"
-              sx={{ ml: 1 }}
-            />
+        <Accordion defaultExpanded sx={{ 
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+          borderRadius: '12px !important',
+          mb: 2,
+          '&:before': { display: 'none' }
+        }}>
+          <AccordionSummary 
+            expandIcon={<ExpandMoreIcon />}
+            sx={{ 
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              borderRadius: '12px 12px 0 0',
+              '&.Mui-expanded': {
+                borderRadius: '12px 12px 0 0',
+              }
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+              <WeightIcon sx={{ mr: 2, color: 'primary.main', fontSize: 24 }} />
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Factor Weights
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Adjust the importance of each optimization factor
+                </Typography>
+              </Box>
+              <Chip
+                label={`${totalWeight}%`}
+                color={totalWeight === 100 ? 'success' : 'error'}
+                size="small"
+                icon={totalWeight === 100 ? <InsightsIcon /> : <PerformanceIcon />}
+                sx={{ 
+                  ml: 1,
+                  fontWeight: 600,
+                  '& .MuiChip-icon': {
+                    fontSize: 16
+                  }
+                }}
+              />
+            </Box>
           </AccordionSummary>
           <AccordionDetails>
             <Box sx={{ mb: 3 }}>
@@ -325,9 +378,33 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">Advanced Options</Typography>
+        <Accordion sx={{ 
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+          borderRadius: '12px !important',
+          mb: 2,
+          '&:before': { display: 'none' }
+        }}>
+          <AccordionSummary 
+            expandIcon={<ExpandMoreIcon />}
+            sx={{ 
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              borderRadius: '12px 12px 0 0',
+              '&.Mui-expanded': {
+                borderRadius: '12px 12px 0 0',
+              }
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <SettingsIcon sx={{ mr: 2, color: 'secondary.main', fontSize: 24 }} />
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Advanced Options
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Enable enhanced analysis features
+                </Typography>
+              </Box>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>
             <Box sx={{ mb: 2 }}>
@@ -370,9 +447,33 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">Search Parameters</Typography>
+        <Accordion sx={{ 
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+          borderRadius: '12px !important',
+          mb: 2,
+          '&:before': { display: 'none' }
+        }}>
+          <AccordionSummary 
+            expandIcon={<ExpandMoreIcon />}
+            sx={{ 
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              borderRadius: '12px 12px 0 0',
+              '&.Mui-expanded': {
+                borderRadius: '12px 12px 0 0',
+              }
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <ViewIcon sx={{ mr: 2, color: 'primary.main', fontSize: 24 }} />
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Search Parameters
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Define search scope and constraints
+                </Typography>
+              </Box>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>
             <Box sx={{ mb: 3 }}>
@@ -405,9 +506,33 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">Exclusion Zones</Typography>
+        <Accordion sx={{ 
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+          borderRadius: '12px !important',
+          mb: 2,
+          '&:before': { display: 'none' }
+        }}>
+          <AccordionSummary 
+            expandIcon={<ExpandMoreIcon />}
+            sx={{ 
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              borderRadius: '12px 12px 0 0',
+              '&.Mui-expanded': {
+                borderRadius: '12px 12px 0 0',
+              }
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <FilterIcon sx={{ mr: 2, color: 'warning.main', fontSize: 24 }} />
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Exclusion Zones
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Areas to exclude from site placement
+                </Typography>
+              </Box>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>
             <Box sx={{ mb: 2 }}>
@@ -478,7 +603,14 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
         )}
       </Box>
 
-      <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+      <Box sx={{ 
+        p: 2, 
+        borderTop: 1, 
+        borderColor: 'divider',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
+        borderRadius: '0 0 8px 8px',
+        margin: '0 8px 8px 8px'
+      }}>
         <Button
           onClick={handleRunAnalysis}
           variant="contained"
@@ -486,9 +618,30 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
           size="large"
           disabled={loading || totalWeight !== 100}
           startIcon={loading ? <CircularProgress size={20} /> : <PlayIcon />}
+          sx={{
+            height: 56,
+            fontSize: '1rem',
+            fontWeight: 600,
+            background: totalWeight === 100 
+              ? 'linear-gradient(145deg, #2563eb 0%, #3b82f6 100%)'
+              : 'linear-gradient(145deg, #9ca3af 0%, #6b7280 100%)',
+            '&:hover': {
+              background: totalWeight === 100 
+                ? 'linear-gradient(145deg, #1d4ed8 0%, #2563eb 100%)'
+                : 'linear-gradient(145deg, #6b7280 0%, #4b5563 100%)',
+              transform: totalWeight === 100 ? 'translateY(-2px)' : 'none',
+              boxShadow: totalWeight === 100 ? '0 8px 25px rgba(37, 99, 235, 0.25)' : 'none',
+            },
+            transition: 'all 0.2s ease-in-out',
+          }}
         >
           {loading ? 'Running Analysis...' : 'Generate Candidate Sites'}
         </Button>
+        {totalWeight !== 100 && (
+          <Typography variant="caption" color="error" sx={{ mt: 1, display: 'block', textAlign: 'center' }}>
+            Factor weights must sum to 100% (currently {totalWeight}%)
+          </Typography>
+        )}
       </Box>
     </Box>
   );

@@ -24,6 +24,9 @@ import {
   PictureAsPdf as PdfIcon,
   Map as MapIcon,
   TableChart as CsvIcon,
+  CloudDownload as CloudDownloadIcon,
+  InsertDriveFile as FileIcon,
+  Assessment as ReportIcon,
 } from '@mui/icons-material';
 import { ExportOptions } from '../types';
 import { apiService } from '../services/api';
@@ -129,10 +132,28 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
   const isDataAvailable = analysisData?.analysis?.candidate_sites?.length > 0;
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Export Analysis Results
-      </Typography>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ 
+        p: 2,
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        borderRadius: '8px 8px 0 0',
+        margin: '8px 8px 0 8px'
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+          <CloudDownloadIcon sx={{ mr: 2, color: 'primary.main', fontSize: 28 }} />
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              Export Analysis Results
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Download your analysis data in multiple formats
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+      
+      <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
       
       {!isDataAvailable && (
         <Alert severity="warning" sx={{ mb: 2 }}>
@@ -163,11 +184,32 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
       )}
 
       {/* PDF Export */}
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <PdfIcon />
-            <Typography variant="h6">PDF Report</Typography>
+      <Accordion sx={{ 
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+        borderRadius: '12px !important',
+        mb: 2,
+        '&:before': { display: 'none' }
+      }}>
+        <AccordionSummary 
+          expandIcon={<ExpandMoreIcon />}
+          sx={{ 
+            background: 'linear-gradient(135deg, #ffffff 0%, #fef2f2 100%)',
+            borderRadius: '12px 12px 0 0',
+            '&.Mui-expanded': {
+              borderRadius: '12px 12px 0 0',
+            }
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <PdfIcon sx={{ color: 'error.main', fontSize: 28 }} />
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                PDF Report
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Professional analysis report with charts and insights
+              </Typography>
+            </Box>
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -224,11 +266,32 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
       </Accordion>
 
       {/* GeoJSON Export */}
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <MapIcon />
-            <Typography variant="h6">GeoJSON (GIS Data)</Typography>
+      <Accordion sx={{ 
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+        borderRadius: '12px !important',
+        mb: 2,
+        '&:before': { display: 'none' }
+      }}>
+        <AccordionSummary 
+          expandIcon={<ExpandMoreIcon />}
+          sx={{ 
+            background: 'linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)',
+            borderRadius: '12px 12px 0 0',
+            '&.Mui-expanded': {
+              borderRadius: '12px 12px 0 0',
+            }
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <MapIcon sx={{ color: 'primary.main', fontSize: 28 }} />
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                GeoJSON (GIS Data)
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Geographic data for QGIS, ArcGIS, and mapping tools
+              </Typography>
+            </Box>
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -279,11 +342,32 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
       </Accordion>
 
       {/* CSV Export */}
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <CsvIcon />
-            <Typography variant="h6">CSV (Spreadsheet Data)</Typography>
+      <Accordion sx={{ 
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+        borderRadius: '12px !important',
+        mb: 2,
+        '&:before': { display: 'none' }
+      }}>
+        <AccordionSummary 
+          expandIcon={<ExpandMoreIcon />}
+          sx={{ 
+            background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)',
+            borderRadius: '12px 12px 0 0',
+            '&.Mui-expanded': {
+              borderRadius: '12px 12px 0 0',
+            }
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <CsvIcon sx={{ color: 'success.main', fontSize: 28 }} />
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                CSV (Spreadsheet Data)
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Structured data for Excel, Google Sheets, and analysis
+              </Typography>
+            </Box>
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -343,11 +427,18 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 2, p: 2, backgroundColor: 'grey.50', borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+          <FileIcon sx={{ mr: 1, color: 'info.main', fontSize: 20 }} />
+          <Typography variant="body2" fontWeight={500}>
+            Export Information
+          </Typography>
+        </Box>
         <Typography variant="body2" color="text.secondary">
           Exported files will be downloaded to your default downloads folder.
           GeoJSON files can be imported into QGIS, ArcGIS, or other GIS applications.
         </Typography>
+      </Box>
       </Box>
     </Box>
   );

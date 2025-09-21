@@ -35,6 +35,12 @@ import {
   Assessment as AssessmentIcon,
   Analytics as AdvancedIcon,
   Close as CloseIcon,
+  TrendingUp as TrendingUpIcon,
+  Speed as SpeedIcon,
+  Visibility as VisibilityIcon,
+  CheckCircle as CheckIcon,
+  RadioButtonUnchecked as UncheckIcon,
+  MyLocation as MyLocationIcon,
 } from '@mui/icons-material';
 import { Site } from '../types';
 import AdvancedSiteDetails from './AdvancedSiteDetails';
@@ -130,30 +136,65 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar>
-        <AssessmentIcon sx={{ mr: 1 }} />
-        <Typography variant="h6">Analysis Results</Typography>
+      <Toolbar sx={{ 
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
+        borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+        borderRadius: '8px 8px 0 0',
+        margin: '8px 8px 0 8px'
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+          <AssessmentIcon sx={{ mr: 1, color: 'primary.main', fontSize: 28 }} />
+          <TrendingUpIcon sx={{ fontSize: 20, color: 'success.main' }} />
+        </Box>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Analysis Results
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Optimized satellite ground station locations
+          </Typography>
+        </Box>
       </Toolbar>
 
       {results.length > 0 && (
         <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-          <Card variant="outlined">
+          <Card variant="outlined" sx={{ 
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+            borderRadius: 3,
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
+          }}>
             <CardContent sx={{ pb: 1 }}>
-              <Typography variant="h6" gutterBottom>
-                Summary
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <SpeedIcon sx={{ mr: 1, color: 'primary.main' }} />
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Analysis Summary
+                </Typography>
+              </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2" color="text.secondary">
-                  Total Sites: {results.length}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Average Score: {averageScore.toFixed(1)}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <MyLocationIcon sx={{ mr: 0.5, fontSize: 16, color: 'text.secondary' }} />
+                  <Typography variant="body2" color="text.secondary">
+                    Total Sites: {results.length}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <StarIcon sx={{ mr: 0.5, fontSize: 16, color: 'warning.main' }} />
+                  <Typography variant="body2" color="text.secondary">
+                    Average Score: {averageScore.toFixed(1)}
+                  </Typography>
+                </Box>
               </Box>
               <LinearProgress
                 variant="determinate"
                 value={averageScore}
                 color={getScoreColor(averageScore)}
+                sx={{ 
+                  height: 8, 
+                  borderRadius: 4,
+                  '& .MuiLinearProgress-bar': {
+                    borderRadius: 4,
+                  }
+                }}
               />
             </CardContent>
           </Card>
@@ -272,25 +313,52 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
                           size="small"
                           onClick={() => handleSiteExpand(site.id)}
                           color={isExpanded ? 'primary' : 'default'}
+                          sx={{ 
+                            '&:hover': { 
+                              backgroundColor: isExpanded ? 'primary.light' : 'action.hover',
+                              transform: 'scale(1.1)'
+                            },
+                            transition: 'all 0.2s ease'
+                          }}
                         >
-                          <InfoIcon />
+                          <VisibilityIcon />
                         </IconButton>
                         <IconButton
                           size="small"
                           onClick={() => setSelectedSiteForDetails(site)}
                           color="secondary"
                           title="Advanced Analysis"
+                          sx={{ 
+                            '&:hover': { 
+                              backgroundColor: 'secondary.light',
+                              transform: 'scale(1.1)'
+                            },
+                            transition: 'all 0.2s ease'
+                          }}
                         >
-                          <Badge badgeContent="+" color="primary" variant="dot">
+                          <Badge badgeContent="AI" color="primary" sx={{
+                            '& .MuiBadge-badge': {
+                              fontSize: '0.5rem',
+                              minWidth: 14,
+                              height: 14,
+                            }
+                          }}>
                             <AdvancedIcon />
                           </Badge>
                         </IconButton>
                         <IconButton
                           size="small"
                           onClick={() => onSiteSelect(site)}
-                          color={isSelected ? 'primary' : 'default'}
+                          color={isSelected ? 'success' : 'default'}
+                          sx={{ 
+                            '&:hover': { 
+                              backgroundColor: isSelected ? 'success.light' : 'action.hover',
+                              transform: 'scale(1.1)'
+                            },
+                            transition: 'all 0.2s ease'
+                          }}
                         >
-                          <LocationIcon />
+                          {isSelected ? <CheckIcon /> : <UncheckIcon />}
                         </IconButton>
                       </Box>
                     </Box>
@@ -340,6 +408,18 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({
                       size="small"
                       onClick={() => onSiteSelect(site)}
                       variant={isSelected ? 'contained' : 'outlined'}
+                      startIcon={isSelected ? <CheckIcon /> : <LocationIcon />}
+                      sx={{
+                        fontWeight: 500,
+                        borderRadius: 2,
+                        '&:hover': {
+                          transform: 'translateY(-1px)',
+                          boxShadow: isSelected 
+                            ? '0 4px 12px rgba(16, 185, 129, 0.25)'
+                            : '0 4px 12px rgba(37, 99, 235, 0.15)',
+                        },
+                        transition: 'all 0.2s ease-in-out',
+                      }}
                     >
                       {isSelected ? 'Selected' : 'Select Site'}
                     </Button>
