@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   Button,
-  Paper,
   Alert,
   CircularProgress,
   Accordion,
@@ -12,21 +11,15 @@ import {
   FormControlLabel,
   Checkbox,
   TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
   Chip,
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
-  Download as DownloadIcon,
   PictureAsPdf as PdfIcon,
   Map as MapIcon,
   TableChart as CsvIcon,
   CloudDownload as CloudDownloadIcon,
   InsertDriveFile as FileIcon,
-  Assessment as ReportIcon,
 } from '@mui/icons-material';
 import { ExportOptions } from '../types';
 import { apiService } from '../services/api';

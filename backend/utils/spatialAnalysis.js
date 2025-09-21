@@ -57,6 +57,80 @@ function calculateElevationScore(elevation) {
 }
 
 /**
+ * Check if coordinates are likely to be on land (not in ocean)
+ * Uses Australia's geographical boundaries and major inland water bodies
+ * @param {number} longitude - Longitude in WGS84
+ * @param {number} latitude - Latitude in WGS84
+ * @returns {boolean} True if likely on land
+ */
+function isLikelyOnLand(longitude, latitude) {
+    // First check: Must be within Australia's general bounds
+    if (longitude < 112.9 || longitude > 153.7 || latitude < -43.7 || latitude > -9.2) {
+        return false;
+    }
+    
+    // Major ocean areas to exclude (simplified coastal filtering)
+    // These are approximate ocean/major water body exclusions
+    
+    // Great Australian Bight (Southern Ocean)
+    if (longitude >= 129.0 && longitude <= 140.0 && latitude <= -35.0) {
+        return false;
+    }
+    
+    // Tasman Sea (far eastern coast)
+    if (longitude >= 152.0 && longitude <= 153.7) {
+        // Check if too far from coast
+        if ((latitude >= -37.0 && latitude <= -28.0) && longitude >= 152.5) {
+            return false;
+        }
+    }
+    
+    // Bass Strait (between Victoria and Tasmania)
+    if (longitude >= 144.0 && longitude <= 148.5 && latitude >= -40.5 && latitude <= -38.5) {
+        return false;
+    }
+    
+    // Spencer Gulf and Gulf St Vincent (SA)
+    if (longitude >= 136.0 && longitude <= 138.5 && latitude >= -35.5 && latitude <= -32.5) {
+        // These are complex coastal areas, be conservative
+        if (longitude <= 137.0 && latitude >= -34.5) {
+            return false; // Spencer Gulf
+        }
+        if (longitude >= 138.0 && latitude >= -34.0) {
+            return false; // Gulf St Vincent
+        }
+    }
+    
+    // Coral Sea (far north Queensland)
+    if (longitude >= 150.0 && latitude >= -16.0 && latitude <= -9.2) {
+        return false;
+    }
+    
+    // Timor Sea (far north)
+    if (longitude >= 129.0 && longitude <= 135.0 && latitude >= -12.0) {
+        return false;
+    }
+    
+    // Indian Ocean (far west)
+    if (longitude <= 115.0 && latitude <= -30.0) {
+        return false;
+    }
+    
+    // Additional validation: exclude obvious water bodies
+    // Lake Eyre and other major inland lakes (simplified)
+    if (longitude >= 136.0 && longitude <= 138.0 && latitude >= -30.0 && latitude <= -28.0) {
+        // This is the Lake Eyre region - allow most of it as it's mostly dry land
+        // Only exclude the actual lake center
+        if (longitude >= 137.2 && longitude <= 137.6 && latitude >= -28.8 && latitude <= -28.4) {
+            return false;
+        }
+    }
+    
+    // If none of the exclusions match, consider it land
+    return true;
+}
+
+/**
  * Calculate RF interference score based on nearby transmitters
  * @param {Array} nearbyTowers - Array of nearby mobile towers
  * @returns {number} Score between 0 and 1
@@ -129,15 +203,18 @@ async function analyzeSites(params = {}) {
     
     console.log(`Area: ${areaWidthDeg.toFixed(2)}° x ${areaHeightDeg.toFixed(2)}°, Resolution: ${adaptiveResolution.toFixed(3)}°`);
     
-    // Generate candidate sites on a grid
+    // Generate candidate sites on a grid, filtering out ocean locations
     const candidateSites = [];
     for (let lng = minLng; lng <= maxLng; lng += adaptiveResolution) {
         for (let lat = minLat; lat <= maxLat; lat += adaptiveResolution) {
-            candidateSites.push({
-                longitude: lng,
-                latitude: lat,
-                id: `site_${lng.toFixed(4)}_${lat.toFixed(4)}`
-            });
+            // Only add sites that are likely to be on land
+            if (isLikelyOnLand(lng, lat)) {
+                candidateSites.push({
+                    longitude: lng,
+                    latitude: lat,
+                    id: `site_${lng.toFixed(4)}_${lat.toFixed(4)}`
+                });
+            }
         }
     }
     

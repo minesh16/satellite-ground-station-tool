@@ -29,7 +29,6 @@ import {
 import {
   LocationOn as LocationIcon,
   Star as StarIcon,
-  Info as InfoIcon,
   Download as DownloadIcon,
   Search as SearchIcon,
   Assessment as AssessmentIcon,
