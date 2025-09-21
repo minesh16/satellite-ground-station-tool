@@ -58,7 +58,9 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
   });
 
   const handleExport = async (format: 'pdf' | 'geojson' | 'csv') => {
-    if (!analysisData || !analysisData.analysis?.candidate_sites?.length) {
+    // Check for both old and new data structures
+    const sites = analysisData?.analysis?.candidate_sites || analysisData?.sites || [];
+    if (!analysisData || !sites.length) {
       setError('No analysis data available for export');
       return;
     }
@@ -74,7 +76,28 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
 
       switch (format) {
         case 'pdf':
-          blob = await apiService.exportToPDF(analysisData, pdfOptions);
+          // Transform the data to match backend expectations
+          const pdfData = analysisData.analysis ? analysisData : {
+            analysis: {
+              candidate_sites: sites.map(site => ({
+                id: site.id,
+                latitude: site.latitude,
+                longitude: site.longitude,
+                total_score: site.score / 100, // Convert back from percentage
+                reasoning: site.reasoning?.join('; ') || '',
+                score_breakdown: {
+                  population_score: site.score / 100 * 0.15,
+                  elevation_score: site.score / 100 * 0.15,
+                  backhaul_score: site.score / 100 * 0.20,
+                }
+              }))
+            },
+            metadata: analysisData.metadata || {
+              analysis_area_km2: 10000,
+              grid_resolution_km: 5
+            }
+          };
+          blob = await apiService.exportToPDF(pdfData, pdfOptions);
           filename = `ground-station-analysis-${timestamp}.pdf`;
           break;
         case 'geojson':
@@ -122,7 +145,9 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
     setCsvOptions(prev => ({ ...prev, [key]: value }));
   };
 
-  const isDataAvailable = analysisData?.analysis?.candidate_sites?.length > 0;
+  // Check for both old and new data structures
+  const sites = analysisData?.analysis?.candidate_sites || analysisData?.sites || [];
+  const isDataAvailable = sites.length > 0;
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -169,7 +194,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({
       {isDataAvailable && (
         <Box sx={{ mb: 2 }}>
           <Chip 
-            label={`${analysisData.analysis.candidate_sites.length} sites available`}
+            label={`${sites.length} sites available`}
             color="primary"
             size="small"
           />
